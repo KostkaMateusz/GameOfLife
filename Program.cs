@@ -1,28 +1,24 @@
-﻿
+﻿using GameOfLife;
+using System.Diagnostics;
 //Any live cell with two or three live neighbours survives.
 //Any dead cell with three live neighbours becomes a live cell.
 //All other live cells die in the next generation. Similarly, all other dead cells stay dead.
 
-Cell[,] table = new Cell[10, 10];
+var stopwatch = new Stopwatch();
+stopwatch.Start();
 
-// initalize objects
-for (int i = 0; i < table.GetLength(0); i++)
-    for (int j = 0; j < table.GetLength(1); j++)
-        table[i, j] = new Cell(i, j, table.GetLength(0) - 1, table.GetLength(1) - 1);
+var game = new GameOfLifeEngine(6000, 6000);
 
-for (int i = 0; i < table.GetLength(0); i++)
-    for (int j = 0; j < table.GetLength(1); j++)
-        table[i, j].SetNeighbors(ref table);
-
+Cell[,] table = game.table;
 
 table[3, 4].currentValue = true;
 table[3, 5].currentValue = true;
 table[3, 6].currentValue = true;
 
 
-
 for (int k = 0; k < 5; k++)
 {
+    game.CalculateNext();
     for (int i = 0; i < table.GetLength(0); i++)
     {
         for (int j = 0; j < table.GetLength(1); j++)
@@ -34,121 +30,106 @@ for (int k = 0; k < 5; k++)
     Console.WriteLine();
 
 
-    for (int i = 0; i < table.GetLength(0); i++)
-    {
-        for (int j = 0; j < table.GetLength(1); j++)
-        {
-            int number_of_live_cells = 0;
-            foreach (var neighbour in table[i, j].Neighbors)
-                if (neighbour != null && neighbour.currentValue == true)
-                    number_of_live_cells++;
 
-            if (table[i, j].currentValue == true && (number_of_live_cells == 2 || number_of_live_cells == 3))
-            {
-                table[i, j].futureValue = true;
-            }
-            else if (number_of_live_cells == 3)
-            {
-                table[i, j].futureValue = true;
-            }
-            else
-            {
-                table[i, j].futureValue = false;
-            }
-        }
-    }
-
-    for (int i = 0; i < table.GetLength(0); i++)
-    {
-        for (int j = 0; j < table.GetLength(1); j++)
-        {
-            table[i, j].Prepare();
-        }
-
-    }
 }
 
 Console.WriteLine(table);
 
+stopwatch.Stop();
+Console.WriteLine(stopwatch.ElapsedMilliseconds);
 
-class Addres
+
+class GameOfLifeEngine
 {
-    public int xPosition;
-    public int yPosition;
+    public Cell[,] table;
 
-    public Addres(int xPosition, int yPosition)
+    public GameOfLifeEngine(int sizeX, int sizeY)
     {
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
-    }
-}
+        table = new Cell[sizeX, sizeY];
 
-class Cell
-{
-    public Addres[] NeighborsAddresses = new Addres[8];
-    public bool currentValue = false;
-    public bool futureValue = false;
+        // initalize objects Cells
+        for (int i = 0; i < table.GetLength(0); i++)
+            for (int j = 0; j < table.GetLength(1); j++)
+                table[i, j] = new Cell(i, j, table.GetLength(0) - 1, table.GetLength(1) - 1);
 
-    public Cell[] Neighbors = new Cell[8];
+        // Calculate Neighbours
+        for (int i = 0; i < table.GetLength(0); i++)
+            for (int j = 0; j < table.GetLength(1); j++)
+                table[i, j].SetNeighbors(ref table);
 
-    private void CalculateNeighborsAddresses(int xPosition, int yPosition, int xSize, int ySize)
-    {
-        int xPositionDecremented = xPosition - 1;
-        int yPositionDecremented = yPosition - 1;
-        int xPositionIncremented = xPosition + 1;
-        int yPositionIncremented = yPosition + 1;
+        //int f = table.GetLength(0);
+        //int g = table.GetLength(1);
 
-        if (xPositionDecremented >= 0)
-        {
-            NeighborsAddresses[7] = new(xPositionDecremented, yPosition);
+        //Parallel.For(0, f, y =>
+        //{
+        //    for (int x = 0; x < g; ++x)
+        //    {
+        //        table[y, x].SetNeighbors(ref table);
+        //    }
+        //});
 
-            if (yPositionDecremented >= 0)
-                NeighborsAddresses[0] = new(xPositionDecremented, yPositionDecremented);
-
-            if (yPositionIncremented < ySize)
-                NeighborsAddresses[6] = new(xPositionDecremented, yPositionIncremented);
-        }
-
-        if (xPositionIncremented < xSize)
-        {
-            NeighborsAddresses[3] = new(xPositionIncremented, yPosition);
-
-            if (yPositionDecremented >= 0)
-                NeighborsAddresses[2] = new(xPositionIncremented, yPositionDecremented);
-
-            if (yPositionIncremented < ySize)
-                NeighborsAddresses[4] = new(xPositionIncremented, yPositionIncremented);
-        }
-
-        if (yPositionDecremented >= 0)
-            NeighborsAddresses[1] = new(xPosition, yPositionDecremented);
-
-        if (yPositionIncremented < ySize)
-            NeighborsAddresses[5] = new(xPosition, yPositionIncremented);
 
     }
 
-    public Cell(int xPosition, int yPosition, int xSize, int ySize)
-    {
-        CalculateNeighborsAddresses(xPosition, yPosition, xSize, ySize);
-    }
 
-    public void SetNeighbors(ref Cell[,] table)
+    public Cell[,] CalculateNext()
     {
-        for (int i = 0; i < NeighborsAddresses.Length; i++)
+        for (int i = 0; i < table.GetLength(0); i++)
         {
-            if (NeighborsAddresses[i] is not null)
+            for (int j = 0; j < table.GetLength(1); j++)
             {
-                Neighbors[i] = table[NeighborsAddresses[i].xPosition, NeighborsAddresses[i].yPosition];
+                int number_of_live_cells = 0;
+                foreach (var neighbour in table[i, j].Neighbors)
+                {
+                    if (neighbour != null && neighbour.currentValue == true)
+                        number_of_live_cells++;
+                }
+
+                if (table[i, j].currentValue == true && (number_of_live_cells == 2 || number_of_live_cells == 3))
+                {
+                    table[i, j].futureValue = true;
+                }
+                else if (number_of_live_cells == 3)
+                {
+                    table[i, j].futureValue = true;
+                }
+                else
+                {
+                    table[i, j].futureValue = false;
+                }
             }
         }
+
+        PrepareToNextIteration();
+
+        return table;
     }
 
-    public void Prepare()
+    private void PrepareToNextIteration()
     {
-        this.currentValue = this.futureValue;
+        for (int i = 0; i < table.GetLength(0); i++)
+            for (int j = 0; j < table.GetLength(1); j++)
+                table[i, j].Prepare();
+
     }
+
+
+    //private void PrepareToNextIteration()
+    //{
+    //    int i = table.GetLength(0);
+    //    int j = table.GetLength(1);
+
+    //    Parallel.For(0, i, y =>
+    //    {
+    //        for (int x = 0; x < j; ++x)
+    //        {
+    //            table[y, x].Prepare();
+    //        }
+    //    });
+    //}
+
+
+
+
 
 }
-
-
