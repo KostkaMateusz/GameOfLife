@@ -19,13 +19,17 @@ class Cell
     public bool currentValue = false;
     public bool futureValue = false;
 
-    public Cell[] Neighbors = new Cell[8];
+
+    public Cell(int xPosition, int yPosition, int xSize, int ySize)
+    {
+        CalculateNeighborsAddresses(xPosition, yPosition, xSize, ySize);
+    }
 
     private void CalculateNeighborsAddresses(int xPosition, int yPosition, int xSize, int ySize)
     {
-        int xPositionDecremented = xPosition - 1;
         int yPositionDecremented = yPosition - 1;
         int xPositionIncremented = xPosition + 1;
+        int xPositionDecremented = xPosition - 1;
         int yPositionIncremented = yPosition + 1;
 
         if (xPositionDecremented >= 0)
@@ -58,25 +62,9 @@ class Cell
 
     }
 
-    public Cell(int xPosition, int yPosition, int xSize, int ySize)
-    {
-        CalculateNeighborsAddresses(xPosition, yPosition, xSize, ySize);
-    }
-
-    public void SetNeighbors(ref Cell[,] table)
-    {
-        for (int i = 0; i < NeighborsAddresses.Length; i++)
-        {
-            //if (NeighborsAddresses[i] != default(Point))
-            {
-                Neighbors[i] = table[NeighborsAddresses[i].xPosition, NeighborsAddresses[i].yPosition];
-            }
-        }
-    }
-
     public void Prepare()
     {
-        this.currentValue = this.futureValue;
+        currentValue = futureValue;
     }
 
 }

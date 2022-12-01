@@ -7,7 +7,7 @@ using System.Diagnostics;
 var stopwatch = new Stopwatch();
 stopwatch.Start();
 
-var game = new GameOfLifeEngine(6000, 6000);
+var game = new GameOfLifeEngine(10, 10);
 
 Cell[,] table = game.table;
 
@@ -28,10 +28,10 @@ for (int k = 0; k < 5; k++)
         Console.WriteLine();
     }
     Console.WriteLine();
-
-
-
 }
+
+
+
 
 Console.WriteLine(table);
 
@@ -50,37 +50,18 @@ class GameOfLifeEngine
         // initalize objects Cells
         for (int i = 0; i < table.GetLength(0); i++)
             for (int j = 0; j < table.GetLength(1); j++)
-                table[i, j] = new Cell(i, j, table.GetLength(0) - 1, table.GetLength(1) - 1);
-
-        // Calculate Neighbours
-        for (int i = 0; i < table.GetLength(0); i++)
-            for (int j = 0; j < table.GetLength(1); j++)
-                table[i, j].SetNeighbors(ref table);
-
-        //int f = table.GetLength(0);
-        //int g = table.GetLength(1);
-
-        //Parallel.For(0, f, y =>
-        //{
-        //    for (int x = 0; x < g; ++x)
-        //    {
-        //        table[y, x].SetNeighbors(ref table);
-        //    }
-        //});
-
-
+                table[i, j] = new Cell(i, j, table.GetLength(0), table.GetLength(1));
     }
-
 
     public Cell[,] CalculateNext()
     {
         for (int i = 0; i < table.GetLength(0); i++)
-        {
             for (int j = 0; j < table.GetLength(1); j++)
             {
                 int number_of_live_cells = 0;
-                foreach (var neighbour in table[i, j].Neighbors)
+                foreach (var neighbourAddress in table[i, j].NeighborsAddresses)
                 {
+                    var neighbour = table[neighbourAddress.xPosition, neighbourAddress.yPosition];
                     if (neighbour != null && neighbour.currentValue == true)
                         number_of_live_cells++;
                 }
@@ -98,38 +79,23 @@ class GameOfLifeEngine
                     table[i, j].futureValue = false;
                 }
             }
-        }
 
         PrepareToNextIteration();
 
         return table;
     }
-
     private void PrepareToNextIteration()
     {
-        for (int i = 0; i < table.GetLength(0); i++)
-            for (int j = 0; j < table.GetLength(1); j++)
-                table[i, j].Prepare();
+        int i = table.GetLength(0);
+        int j = table.GetLength(1);
 
+        Parallel.For(0, i, y =>
+        {
+            for (int x = 0; x < j; ++x)
+            {
+                table[y, x].Prepare();
+            }
+        });
     }
-
-
-    //private void PrepareToNextIteration()
-    //{
-    //    int i = table.GetLength(0);
-    //    int j = table.GetLength(1);
-
-    //    Parallel.For(0, i, y =>
-    //    {
-    //        for (int x = 0; x < j; ++x)
-    //        {
-    //            table[y, x].Prepare();
-    //        }
-    //    });
-    //}
-
-
-
-
 
 }
