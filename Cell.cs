@@ -1,6 +1,4 @@
 ﻿namespace GameOfLife;
-
-
 internal struct Point
 {
     public int xPosition;
@@ -19,9 +17,13 @@ class Cell
     public bool currentValue = false;
     public bool futureValue = false;
 
-
+    public readonly int xPosition;
+    public readonly int yPosition;
     public Cell(int xPosition, int yPosition, int xSize, int ySize)
     {
+        this.xPosition = xPosition;
+        this.yPosition=yPosition;
+
         CalculateNeighborsAddresses(xPosition, yPosition, xSize, ySize);
     }
 
