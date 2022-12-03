@@ -6,37 +6,33 @@ using System.Diagnostics;
 var stopwatch = new Stopwatch();
 stopwatch.Start();
 
-// instance of engine
-var game = new GameOfLifeEngine(10, 10);
+var mapXSize = 100;
+var mapYSize = 100;
+var xMapResolution = 2400;
+var yMapResolution = 2400;
 
-// external reference for object dable 
-// for debuging
-Cell[,] table = game.table;
+var plt = new ScottPlot.Plot(xMapResolution, yMapResolution);
+var gameOfLifeEngine = new GameOfLifeEngine(mapXSize, mapYSize);
+
+gameOfLifeEngine.InsertIntoGame(55, 44, true);
+gameOfLifeEngine.InsertIntoGame(55, 45, true);
+gameOfLifeEngine.InsertIntoGame(55, 46, true);
+
+gameOfLifeEngine.InsertIntoGame(53, 45, true);
+gameOfLifeEngine.InsertIntoGame(56, 45, true);
 
 
-// TODO add method to add new points in run
-table[3, 4].currentValue = true;
-table[3, 5].currentValue = true;
-table[3, 6].currentValue = true;
 
 // Generate runs
-for (int k = 0; k < 51; k++)
+for (int k = 0; k < 50; k++)
 {
-    game.CalculateNext();
-}
+    var nextStep=gameOfLifeEngine.CalculateNext();
+    var data2D = GameOfLifeEngine.ConvertToArray(nextStep);    
 
-//display 
-// TODO implement to string method for debubing
-for (int i = 0; i < table.GetLength(0); i++)
-{
-    for (int j = 0; j < table.GetLength(1); j++)
-    {
-        Console.Write(table[i, j].currentValue.ToString() + " ");
-    }
-    Console.WriteLine();
+    plt.AddHeatmap(data2D);
+    plt.SaveFig($"heatmap_quickstart{k+1}.png");
+    
 }
-Console.WriteLine();
-
 
 
 stopwatch.Stop();

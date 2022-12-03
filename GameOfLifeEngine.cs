@@ -1,10 +1,9 @@
-﻿
-namespace GameOfLife;
+﻿namespace GameOfLife;
 
 
 class GameOfLifeEngine
 {
-    public Cell[,] table;
+    private Cell[,] table;
 
     public GameOfLifeEngine(int sizeX, int sizeY)
     {
@@ -79,5 +78,29 @@ class GameOfLifeEngine
         });
     }
 
+    public void InsertIntoGame(int xPosition, int yPosition, bool value)
+    {
+        table[xPosition, yPosition].currentValue = value;
+    }
+
+    public static double[,] ConvertToArray(Cell[,] array)
+    {
+
+        int height = array.GetLength(0);
+        int width = array.GetLength(1);
+
+        double[,] results = new double[height, width];
+
+        Parallel.For(0, height, y =>
+        {
+            for (int x = 0; x < width; ++x)
+            {
+                results[y, x] = array[y, x].currentValue ? 1 : 0;
+            }
+        });
+
+        return results;
+    }
+    
 }
 
