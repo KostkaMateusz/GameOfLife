@@ -1,5 +1,5 @@
-﻿namespace GameOfLife;
-internal struct Point
+﻿namespace LifeAPI;
+public struct Point
 {
     public int xPosition;
     public int yPosition;
@@ -11,7 +11,7 @@ internal struct Point
     }
 }
 
-class Cell
+public class Cell
 {
     public Point[] NeighborsAddresses = new Point[8];
     public bool currentValue = false;
@@ -19,10 +19,11 @@ class Cell
 
     public readonly int xPosition;
     public readonly int yPosition;
-    public Cell(int xPosition, int yPosition, int xSize, int ySize)
+    public Cell(int xPosition, int yPosition, int xSize, int ySize,bool currentValue)
     {
         this.xPosition = xPosition;
         this.yPosition=yPosition;
+        this.currentValue = currentValue;
 
         CalculateNeighborsAddresses(xPosition, yPosition, xSize, ySize);
     }

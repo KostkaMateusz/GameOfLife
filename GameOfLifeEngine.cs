@@ -1,12 +1,16 @@
-﻿namespace GameOfLife;
+﻿
+namespace LifeAPI;
 
 
-class GameOfLifeEngine
+public class GameOfLifeEngine
 {
     private Cell[,] table;
 
-    public GameOfLifeEngine(int sizeX, int sizeY)
+    public GameOfLifeEngine(bool[][] initialValueTable)
     {
+        int sizeX = initialValueTable.Length;
+        int sizeY = initialValueTable[0].Length;
+
         table = new Cell[sizeX, sizeY];
 
         // initalize objects Cells
@@ -17,7 +21,7 @@ class GameOfLifeEngine
         {
             for (int x = 0; x < width; ++x)
             {
-                table[y, x] = new Cell(y, x, table.GetLength(0), table.GetLength(1));
+                table[y, x] = new Cell(y, x, table.GetLength(0), table.GetLength(1), initialValueTable[y][x]);
 
             }
         });
@@ -43,7 +47,7 @@ class GameOfLifeEngine
                 }
 
                 //Any live cell with two or three live neighbours survives.
-                if (table[y, x].currentValue == true && number_of_live_cells == 2 )
+                if (table[y, x].currentValue == true && number_of_live_cells == 2)
                 {
                     table[y, x].futureValue = true;
                 }
@@ -83,7 +87,7 @@ class GameOfLifeEngine
         table[xPosition, yPosition].currentValue = value;
     }
 
-    public static double[,] ConvertToArray(Cell[,] array)
+    public static double[][] ConvertToArray(Cell[,] array)
     {
 
         int height = array.GetLength(0);
@@ -99,8 +103,16 @@ class GameOfLifeEngine
             }
         });
 
-        return results;
+        // Take my 2D array and cast it as a 1D array
+        double[] obj1D = ((double[,])results).Cast<double>().ToArray();
+
+        // using linq, chunk the 1D array back into a jagged array
+        Int32 j = 0;
+        double[][] jagged = obj1D.GroupBy(x => j++ / results.GetLength(1)).Select(y => y.ToArray()).ToArray();
+
+
+        return jagged;
     }
-    
+
 }
 
