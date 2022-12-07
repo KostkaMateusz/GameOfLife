@@ -1,12 +1,19 @@
 ﻿
+using FluentValidation;
 using LifeAPI;
 
 namespace GameOfLifeApi;
 public static class ApiEngine
 {
-    public static IResult GetData(DataTable table)
+    public static IResult GetData(DataTable table, IValidator<DataTable> validator)
     {
-        var engine = new GameOfLifeEngine(table.data.ToArray());
+        var validationResult=validator.Validate(table);
+
+        if(!validationResult.IsValid)
+        {
+            return Results.BadRequest(validationResult.Errors);
+        }
+        var engine = new GameOfLifeEngine(table.Data.ToArray());
         var data = engine.CalculateNext();
         var dataConvert=GameOfLifeEngine.ConvertToArray(data);
 

@@ -2,5 +2,5 @@
 
 public class DataTable
 {
-    public bool[][] data { get; set; }
+    public bool[][]? Data { get; set; }
 }
