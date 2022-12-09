@@ -1,10 +1,10 @@
 //API recognises in 2D array elements as 1 is normal place; element 0 is an obstacle; element -1 is meta; element 2 is start
-const url = "https://localhost:7013/";
+const url = "https://gameoflifeproject.azurewebsites.net";
 let buttonList = [];
 
 
 function validateInput(xSize, ySize) {
-    if (xSize <= 40 && xSize > 2 && ySize <= 40 && ySize > 2) return true;
+    if (xSize <= 200 && xSize > 2 && ySize <= 200 && ySize > 2) return true;
     else return false;
 }
 
@@ -61,7 +61,7 @@ function generateTable() {
     tbl.setAttribute('id', "table-map");
     // appends <table> into <body>
     document.getElementById("map").appendChild(tbl);
-    userInfo("Select Start Field")
+    userInfo("Click Generate Next Iteration")
 
 }
 
@@ -94,8 +94,6 @@ function send() {
         data: GenerateUploadData(buttonList)
     })
 
-    console.log(uploadDataJSON);
-
     fetch(url, {
         method: "POST",
         headers: {
@@ -124,5 +122,5 @@ function changevalues(value) {
 }
 
 function userInfo(text) {
-    document.getElementById("info").innerHTML = "A star: " + text;
+    document.getElementById("info").innerHTML = "Game of Life: " + text;
 }
