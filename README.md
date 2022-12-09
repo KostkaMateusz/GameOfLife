@@ -22,17 +22,8 @@ Libraries used in Project:
 
 ---
 
-### Steps:
-- Step 1
-![Step1](.\Images\outputP1.png)
-- Step 2
-![Step2](.\Images\outputP2.png)
-- Step 3
-![Step3](.\Images\outputP3.png)
-- Step 4
-![Step4](.\Images\outputP4.png)
-- Step 5
-![Step5](.\Images\outputP5.png)
+### Working of the Algorithm:
+![Step5](.\Images\outputGif.gif)
 
 ---
 
