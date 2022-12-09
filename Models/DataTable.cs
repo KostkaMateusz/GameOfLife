@@ -1,4 +1,4 @@
-﻿namespace LifeAPI;
+﻿namespace GameOfLifeApi.Models;
 
 public class DataTable
 {

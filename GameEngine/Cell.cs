@@ -1,4 +1,4 @@
-﻿namespace LifeAPI;
+﻿namespace GameOfLifeApi.GameEngine;
 public struct Point
 {
     public int xPosition;
@@ -19,10 +19,10 @@ public class Cell
 
     public readonly int xPosition;
     public readonly int yPosition;
-    public Cell(int xPosition, int yPosition, int xSize, int ySize,bool currentValue)
+    public Cell(int xPosition, int yPosition, int xSize, int ySize, bool currentValue)
     {
         this.xPosition = xPosition;
-        this.yPosition=yPosition;
+        this.yPosition = yPosition;
         this.currentValue = currentValue;
 
         CalculateNeighborsAddresses(xPosition, yPosition, xSize, ySize);

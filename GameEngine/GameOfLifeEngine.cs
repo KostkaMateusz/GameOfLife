@@ -1,5 +1,4 @@
-﻿
-namespace LifeAPI;
+﻿namespace GameOfLifeApi.GameEngine;
 
 
 public class GameOfLifeEngine
@@ -104,10 +103,10 @@ public class GameOfLifeEngine
         });
 
         // Take my 2D array and cast it as a 1D array
-        double[] obj1D = ((double[,])results).Cast<double>().ToArray();
+        double[] obj1D = results.Cast<double>().ToArray();
 
         // using linq, chunk the 1D array back into a jagged array
-        Int32 j = 0;
+        int j = 0;
         double[][] jagged = obj1D.GroupBy(x => j++ / results.GetLength(1)).Select(y => y.ToArray()).ToArray();
 
 
