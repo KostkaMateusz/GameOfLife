@@ -23,7 +23,7 @@ Libraries used in Project:
 ---
 
 ### Working of the Algorithm:
-![Step5](.\Images\outputGif.gif)
+![Step5](.\GameOfLife.gif)
 
 ---
 
