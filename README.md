@@ -23,7 +23,7 @@ Libraries used in Project:
 ---
 
 ### Working of the Algorithm:
-![Step5](.\GameOfLife.gif)
+![Step5](https://github.com/KostkaMateusz/GameOfLife/blob/master/GameOfLife.gif)
 
 ---
 
