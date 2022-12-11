@@ -2,7 +2,9 @@
 This project is implementation on [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
 
 ---
-This Core Class is wraped around C# ASP.NET Minimal API framework to provide web endpoint. Ducumentation of a API in Swager is [here](Azure)
+This Core Class is wraped around C# ASP.NET Minimal API framework to provide web endpoint. Ducumentation of a API in Swager is [here](https://gameoflifeproject.azurewebsites.net/swagger).
+
+FrontEnd of API can be acceses [here](https://gameoflifeproject.azurewebsites.net/gameOfLife/index.html).
 
 Thie endpoint is used by client side JavaScript aplication to visualise bahavior of a cells.
 
